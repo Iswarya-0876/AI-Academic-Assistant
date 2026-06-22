@@ -8,8 +8,7 @@
 AI Academic Assistant
 </title>
 
-
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/frontend/style.css">
 
 </head>
 
@@ -17,52 +16,108 @@ AI Academic Assistant
 <body>
 
 
-<h1>
-AI Academic Assistant
-</h1>
+<div class="app">
+
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+
+<h2>
+🤖 AI Assistant
+</h2>
+
+
+<button onclick="newChat()">
++ New Chat
+</button>
+
+
+<button onclick="document.getElementById('pdf').click()">
+📄 Upload PDF
+</button>
 
 
 <input 
 type="file"
-id="pdf">
-
-
-<button onclick="uploadPDF()">
-Upload PDF
-</button>
-
-
-
-<hr>
-
-
-<h2>
-Ask AI
-</h2>
-
-
-<input
-id="question"
-placeholder="Ask your question">
-
-
-<button onclick="askAI()">
-Send
-</button>
+id="pdf"
+hidden
+onchange="uploadPDF()">
 
 
 
 <h3>
-Answer:
+History
 </h3>
 
 
-<p id="answer">
+<div id="history">
 
-</p>
+</div>
 
 
-<script src="app.js"></script>
+</div>
+
+
+
+
+
+<!-- CHAT AREA -->
+
+
+<div class="chat">
+
+
+<div class="chat-header">
+
+AI Academic Assistant
+
+</div>
+
+
+
+<div id="messages"
+class="messages">
+
+
+<div class="bot">
+
+Hello 👋 Upload your PDF and ask questions.
+
+</div>
+
+
+</div>
+
+
+
+<div class="input-area">
+
+
+<input
+id="question"
+placeholder="Ask anything...">
+
+
+
+<button onclick="askAI()">
+
+Send
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<script src="/frontend/app.js"></script>
 
 
 </body>

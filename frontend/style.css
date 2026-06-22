@@ -1,8 +1,91 @@
+*{
+
+box-sizing:border-box;
+
+}
+
+
 body{
 
-font-family: Arial;
+margin:0;
 
-background:#f4f4f4;
+font-family:Arial;
+
+background:#343541;
+
+}
+
+
+
+.app{
+
+display:flex;
+
+height:100vh;
+
+}
+
+
+
+
+.sidebar{
+
+width:260px;
+
+background:#202123;
+
+color:white;
+
+padding:20px;
+
+}
+
+
+
+.sidebar button{
+
+width:100%;
+
+padding:12px;
+
+margin:10px 0;
+
+background:#444654;
+
+color:white;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
+}
+
+
+
+
+.chat{
+
+flex:1;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+
+
+.chat-header{
+
+padding:20px;
+
+background:#202123;
+
+color:white;
+
+font-size:22px;
 
 text-align:center;
 
@@ -10,38 +93,96 @@ text-align:center;
 
 
 
-.box{
 
-margin:100px auto;
+.messages{
 
-width:300px;
+flex:1;
 
-padding:30px;
+padding:20px;
 
-background:white;
-
-}
-
-
-
-input{
-
-display:block;
-
-margin:15px auto;
-
-padding:10px;
-
-width:250px;
+overflow:auto;
 
 }
 
 
 
-button{
 
-padding:10px 20px;
+.bot,
+.user{
 
-cursor:pointer;
+max-width:70%;
+
+padding:15px;
+
+margin:15px;
+
+border-radius:10px;
+
+color:white;
+
+}
+
+
+
+.bot{
+
+background:#444654;
+
+}
+
+
+
+.user{
+
+background:#10a37f;
+
+margin-left:auto;
+
+}
+
+
+
+
+.input-area{
+
+display:flex;
+
+padding:20px;
+
+background:#202123;
+
+}
+
+
+
+
+.input-area input{
+
+flex:1;
+
+padding:15px;
+
+border-radius:8px;
+
+border:none;
+
+}
+
+
+
+
+.input-area button{
+
+padding:15px 25px;
+
+margin-left:10px;
+
+background:#10a37f;
+
+color:white;
+
+border:none;
+
+border-radius:8px;
 
 }
