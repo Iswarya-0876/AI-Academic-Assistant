@@ -1,32 +1,28 @@
 from argon2 import PasswordHasher
 
 
-ph = PasswordHasher()
+ph=PasswordHasher()
 
 
-
-def hash_password(password: str):
+def hash_password(password):
 
     return ph.hash(password)
 
 
 
-
-
 def verify_password(
-    plain_password: str,
-    hashed_password: str
+    password,
+    hashed
 ):
 
     try:
 
         ph.verify(
-            hashed_password,
-            plain_password
+            hashed,
+            password
         )
 
         return True
-
 
     except:
 

@@ -1,38 +1,23 @@
 from services.pdf_parser import extract_text
-from services.chunker import chunk_text
-from services.embedding_service import create_embeddings
-from services.vectordb_service import store_data
+from services.chunker import split_text
+from services.vector_service import add_vectors
 
 
 
 def ingest_pdf(path):
 
-    print("Reading PDF...")
 
     text = extract_text(path)
 
 
-    print("Creating chunks...")
-
-    chunks = chunk_text(text)
+    chunks = split_text(text)
 
 
-    print("Creating embeddings...")
-
-    embeddings = create_embeddings(chunks)
+    add_vectors(chunks)
 
 
-    ids = [
-        f"chunk_{i}"
-        for i in range(len(chunks))
-    ]
+    return {
 
+        "chunks": len(chunks)
 
-    store_data(
-        chunks,
-        embeddings,
-        ids
-    )
-
-
-    print("Ingestion Complete")
+    }

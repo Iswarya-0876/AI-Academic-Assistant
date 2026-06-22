@@ -1,340 +1,58 @@
-const API = "http://127.0.0.1:8000";
+const API="http://127.0.0.1:8000";
 
-
-// ================= REGISTER =================
-
-async function register(){
-
-
-    const username =
-    document.getElementById("username").value;
-
-
-    const email =
-    document.getElementById("email").value;
-
-
-    const password =
-    document.getElementById("password").value;
-
-
-
-    let response =
-    await fetch(
-        API + "/api/auth/register",
-        {
-
-            method:"POST",
-
-            headers:{
-                "Content-Type":"application/json"
-            },
-
-
-            body:JSON.stringify({
-
-                username: username,
-
-                email: email,
-
-                password: password
-
-            })
-
-        }
-    );
-
-
-
-    let data =
-    await response.json();
-
-
-
-    console.log(data);
-
-
-
-    if(response.ok){
-
-        alert("Registration successful");
-
-        window.location.href =
-        "/frontend/index.html";
-
-    }
-
-    else{
-
-        alert(
-            data.detail ||
-            "Registration failed"
-        );
-
-    }
-
-}
-
-
-
-
-
-// ================= LOGIN =================
-
-
-async function login(){
-
-
-    const email =
-    document.getElementById("email").value;
-
-
-
-    const password =
-    document.getElementById("password").value;
-
-
-
-    let response =
-    await fetch(
-        API + "/api/auth/login",
-        {
-
-
-            method:"POST",
-
-
-            headers:{
-
-                "Content-Type":
-                "application/json"
-
-            },
-
-
-            body:JSON.stringify({
-
-                email:email,
-
-                password:password
-
-            })
-
-        }
-
-    );
-
-
-
-
-    let data =
-    await response.json();
-
-
-
-    console.log(data);
-
-
-
-    if(response.ok){
-
-
-        localStorage.setItem(
-            "token",
-            data.access_token || data.token
-        );
-
-
-
-        window.location.href =
-        "/frontend/dashboard.html";
-
-
-    }
-
-
-    else{
-
-
-        alert(
-
-            data.detail ||
-            "Invalid login"
-
-        );
-
-    }
-
-
-}
-
-
-
-
-
-// ================= UPLOAD PDF =================
 
 
 async function uploadPDF(){
 
 
-    let file =
-    document.getElementById("pdf").files[0];
+let file =
+document.getElementById("pdfFile").files[0];
 
 
+if(!file){
 
-    let form =
-    new FormData();
+alert("Select PDF first");
 
-
-
-    form.append(
-        "file",
-        file
-    );
-
-
-
-    let response =
-    await fetch(
-
-        API + "/api/upload",
-
-        {
-
-            method:"POST",
-
-            body:form
-
-        }
-
-    );
-
-
-
-    let data =
-    await response.json();
-
-
-
-    console.log(data);
-
-
-
-    alert(
-        "PDF uploaded successfully"
-    );
-
+return;
 
 }
 
 
 
+let formData =
+new FormData();
 
 
-// ================= ASK AI =================
-
-
-async function askAI(){
-
-
-    let question =
-    document.getElementById("question").value;
-
-
-
-    if(question.trim()=="")
-    return;
+formData.append(
+"file",
+file
+);
 
 
 
-    addMessage(
-        question,
-        "user"
-    );
+let response =
+await fetch(
 
+API+"/api/upload",
 
+{
 
-    document.getElementById("question").value="";
+method:"POST",
 
-
-
-    let response =
-    await fetch(
-
-        API + "/api/query",
-
-        {
-
-
-            method:"POST",
-
-
-            headers:{
-
-                "Content-Type":
-                "application/json"
-
-            },
-
-
-            body:JSON.stringify({
-
-                question:question
-
-            })
-
-        }
-
-    );
-
-
-
-    let data =
-    await response.json();
-
-
-
-    addMessage(
-
-        data.answer ||
-        "No response",
-
-        "bot"
-
-    );
-
+body:formData
 
 }
 
+);
 
 
 
-
-// ================= CHAT UI =================
-
-
-function addMessage(text,type){
-
-
-    let box =
-    document.createElement("div");
+let data =
+await response.json();
 
 
 
-    box.className =
-    type;
-
-
-
-    box.innerHTML =
-    text;
-
-
-
-    document
-    .getElementById("messages")
-    .appendChild(box);
+alert(data.message);
 
 
 
@@ -343,15 +61,85 @@ function addMessage(text,type){
 
 
 
+async function sendMessage(){
 
 
-function newChat(){
+let question =
+document.getElementById(
+"question"
+).value;
 
 
-    document
-    .getElementById("messages")
-    .innerHTML =
-    "";
+
+if(question==="") return;
+
+
+
+document.getElementById(
+"chatBox"
+).innerHTML +=
+
+`
+<p>
+<b>You:</b>
+${question}
+</p>
+`;
+
+
+
+let response =
+await fetch(
+
+API+"/api/query",
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+
+body:JSON.stringify({
+
+question:question
+
+})
+
+
+}
+
+);
+
+
+
+let data =
+await response.json();
+
+
+
+document.getElementById(
+"chatBox"
+).innerHTML +=
+
+
+`
+
+<p>
+
+<b>AI:</b>
+
+${data.answer}
+
+</p>
+
+
+`;
+
 
 
 }

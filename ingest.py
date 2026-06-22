@@ -1,8 +1,15 @@
 from services.ingest_service import ingest_pdf
 
 
-if __name__ == "__main__":
 
-    ingest_pdf(
-        "data\MACHINE LEARNING.pdf"
-    )
+pdf_path="data/MACHINE LEARNING.pdf"
+
+
+
+result=ingest_pdf(
+    pdf_path
+)
+
+
+
+print(result)

@@ -2,40 +2,70 @@
 
 <html>
 
-
 <head>
 
 <title>
-AI Chat
+AI Academic Assistant
 </title>
 
-<link rel="stylesheet"
-href="/frontend/style.css">
+
+<link rel="stylesheet" href="/static/style.css">
+
 
 </head>
-
 
 
 <body>
 
 
+<div class="app">
+
+
 <h1>
-🤖 AI Assistant
+🤖 AI Academic Assistant
 </h1>
 
 
-<div id="chatbox">
+
+<h3>
+Upload Study Material
+</h3>
+
+
+
+<input 
+type="file"
+id="pdfFile"
+>
+
+
+
+<button onclick="uploadPDF()">
+
+Upload PDF
+
+</button>
+
+
+
+<div id="chatBox">
 
 
 </div>
 
 
 
-<input id="question"
-placeholder="Ask anything...">
+
+<input
+
+id="question"
+
+placeholder="Ask anything from your PDF..."
+
+>
 
 
-<button onclick="askAI()">
+<button onclick="sendMessage()">
 
 Send
 
@@ -43,7 +73,11 @@ Send
 
 
 
-<script src="/frontend/app.js"></script>
+</div>
+
+
+
+<script src="/static/app.js"></script>
 
 
 </body>

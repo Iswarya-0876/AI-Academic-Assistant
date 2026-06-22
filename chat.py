@@ -1,20 +1,27 @@
-from services.rag_service import query_rag
+from services.rag_service import answer
 
-
-print("AI Academic Assistant Started")
-print("Type exit to stop")
 
 
 while True:
 
-    question = input("\nYou: ")
+
+    question=input(
+        "\nYou: "
+    )
 
 
-    if question.lower()=="exit":
+    if question=="exit":
+
         break
 
 
-    answer = query_rag(question)
+
+    response=answer(
+        question
+    )
 
 
-    print("\nAI:", answer)
+    print(
+        "\nAI:",
+        response
+    )

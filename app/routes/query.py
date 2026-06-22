@@ -1,13 +1,10 @@
 from fastapi import APIRouter
-
 from pydantic import BaseModel
 
-
-from services.rag_service import query_rag
-
+from services.rag_service import rag_answer
 
 
-router = APIRouter()
+router=APIRouter()
 
 
 
@@ -15,28 +12,26 @@ class Question(BaseModel):
 
     question:str
 
+    user_id:str="default"
 
 
 
 @router.post("/query")
 
-def ask_question(
-    data:Question
-):
+def query(data:Question):
 
 
-    answer = query_rag(
-        data.question
+    answer = rag_answer(
+
+        data.question,
+
+        data.user_id
+
     )
 
 
     return {
 
-        "question":
-        data.question,
-
-
-        "answer":
-        answer
+        "answer":answer
 
     }

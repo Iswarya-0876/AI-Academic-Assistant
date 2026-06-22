@@ -1,35 +1,67 @@
-from services.embedding_service import create_embeddings
-from services.vectordb_service import collection
+from services.vector_service import search_vectors
 from services.llm_service import ask_llm
 
+from services.memory_service import (
+    save_chat,
+    get_history
+)
 
 
-def query_rag(question):
+
+def rag_answer(question, user_id="default"):
 
 
-    query_vector = create_embeddings(
-        [question]
-    )[0]
+    # Get PDF chunks
+
+    docs = search_vectors(question)
 
 
-    results = collection.query(
-        query_embeddings=[
-            query_vector
-        ],
-        n_results=3
-    )
+
+    if not docs:
+
+        return "I could not find this information in your PDF."
 
 
-    context = "\n".join(
-        results["documents"][0]
-    )
+
+    context = "\n\n".join(docs)
+
+
+
+    # Get previous chats
+
+    history = get_history(user_id)
+
+
+
+    memory = ""
+
+
+    for chat in reversed(history):
+
+        memory += f"""
+
+User:
+{chat.question}
+
+AI:
+{chat.answer}
+
+"""
+
 
 
     prompt = f"""
 
-You are an AI academic assistant.
+You are an AI Academic Assistant.
 
-Use this context:
+Use the document context to answer.
+
+Previous conversation:
+
+{memory}
+
+
+Document:
 
 {context}
 
@@ -39,9 +71,26 @@ Question:
 {question}
 
 
-Answer:
+Give a clear human explanation.
 
 """
 
 
-    return ask_llm(prompt)
+
+    answer = ask_llm(prompt)
+
+
+
+    save_chat(
+
+        user_id,
+
+        question,
+
+        answer
+
+    )
+
+
+
+    return answer

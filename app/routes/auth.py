@@ -1,212 +1,81 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 from database.connection import SessionLocal
 from database.models import User
 
-from security.password import hash_password, verify_password
-from security.jwt import create_token
+from security.password import *
+from security.jwt import *
 
 
-
-router = APIRouter()
-
+router=APIRouter()
 
 
-# =====================
-# Request Models
-# =====================
+class UserData(BaseModel):
 
-from pydantic import BaseModel, Field
-
-
-
-class RegisterRequest(BaseModel):
-
-    username: str
-
-    email: str
-
-    password: str = Field(
-        min_length=6,
-        max_length=72
-    )
+    username:str
+    email:str
+    password:str
 
 
-
-
-
-class LoginRequest(BaseModel):
-
-    email: str
-
-    password: str
-
-
-
-
-
-# =====================
-# Register
-# =====================
 
 @router.post("/register")
-def register(user: RegisterRequest):
+def register(data:UserData):
+
+    db=SessionLocal()
 
 
-    db = SessionLocal()
+    user=User(
 
+    username=data.username,
 
+    email=data.email,
 
-    existing_user = (
-        db.query(User)
-        .filter(User.email == user.email)
-        .first()
-    )
-
-
-
-    if existing_user:
-
-        db.close()
-
-        raise HTTPException(
-
-            status_code=400,
-
-            detail="Email already exists"
-
-        )
-
-
-
-    new_user = User(
-
-        username=user.username,
-
-        email=user.email,
-
-        password=hash_password(
-            user.password
-        )
+    password=hash_password(data.password)
 
     )
 
 
-
-    db.add(new_user)
+    db.add(user)
 
     db.commit()
 
-    db.close()
-
-
 
     return {
-
-        "message":
-        "User registered successfully"
-
+        "message":"registered"
     }
 
 
 
-
-
-# =====================
-# Login
-# =====================
-
-
 @router.post("/login")
-def login(user: LoginRequest):
+def login(data:UserData):
+
+    db=SessionLocal()
 
 
-    db = SessionLocal()
-
-
-
-    db_user = (
-
-        db.query(User)
-
-        .filter(
-            User.email == user.email
-        )
-
-        .first()
-
-    )
+    user=db.query(User).filter(
+        User.email==data.email
+    ).first()
 
 
 
-    if not db_user:
+    if not user:
 
-
-        db.close()
-
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid email"
-
-        )
-
-
-
-
-
-    if not verify_password(
-
-        user.password,
-
-        db_user.password
-
-    ):
-
-
-        db.close()
-
-
-        raise HTTPException(
-
-            status_code=401,
-
-            detail="Invalid password"
-
-        )
-
-
-
-
-    token = create_token(
-
-        {
-
-            "email":
-            db_user.email
-
+        return {
+            "error":"invalid"
         }
 
+
+
+    token=create_token(
+        {
+        "email":user.email
+        }
     )
-
-
-
-    db.close()
-
 
 
     return {
 
-
-        "access_token":
-        token,
-
-
-        "token_type":
-        "bearer"
-
+    "token":token
 
     }

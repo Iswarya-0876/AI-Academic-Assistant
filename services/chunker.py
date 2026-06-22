@@ -1,22 +1,19 @@
-def chunk_text(
-    text,
-    chunk_size=500,
-    overlap=50
-):
+def split_text(text, chunk_size=500, overlap=50):
+    
+    chunks = []
 
-    chunks=[]
-
-    start=0
+    start = 0
 
     while start < len(text):
 
-        end=start+chunk_size
+        end = start + chunk_size
 
-        chunks.append(
-            text[start:end]
-        )
+        chunk = text[start:end]
 
-        start += chunk_size-overlap
+        chunks.append(chunk)
+
+
+        start = end - overlap
 
 
     return chunks
