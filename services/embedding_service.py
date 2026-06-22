@@ -1,12 +1,25 @@
 from sentence_transformers import SentenceTransformer
 
 
-model = SentenceTransformer(
-"all-MiniLM-L6-v2"
-)
+model = None
+
+
+def get_model():
+
+    global model
+
+    if model is None:
+
+        model = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )
+
+    return model
 
 
 
-def create_embedding(text):
+def create_embeddings(texts):
 
-    return model.encode(text).tolist()
+    model = get_model()
+
+    return model.encode(texts).tolist()

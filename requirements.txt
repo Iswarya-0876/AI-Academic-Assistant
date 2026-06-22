@@ -4,8 +4,9 @@ sqlalchemy
 python-jose
 passlib
 argon2-cffi
-python-multipart
 chromadb
-sentence-transformers
+fastembed
+langchain
 pypdf
 requests
+python-multipart
